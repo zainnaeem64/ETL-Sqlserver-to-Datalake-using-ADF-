@@ -1,0 +1,95 @@
+{
+	"count": 19,
+	"value": [
+		{
+			"schemaname": "Sales",
+			"tablename": "SalesOrderHeaderSalesReason"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "SalesPerson"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "SalesPersonQuotaHistory"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "SalesReason"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "SalesTaxRate"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "PersonCreditCard"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "SalesTerritory"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "SalesTerritoryHistory"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "ShoppingCartItem"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "SpecialOffer"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "SpecialOfferProduct"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "Store"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "CountryRegionCurrency"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "CreditCard"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "Currency"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "CurrencyRate"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "Customer"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "SalesOrderDetail"
+		},
+		{
+			"schemaname": "Sales",
+			"tablename": "SalesOrderHeader"
+		}
+	],
+	"effectiveIntegrationRuntime": "integrationRuntime1",
+	"billingReference": {
+		"activityType": "PipelineActivity",
+		"billableDuration": [
+			{
+				"meterType": "SelfhostedIR",
+				"duration": 0.016666666666666666,
+				"unit": "Hours"
+			}
+		]
+	},
+	"durationInQueue": {
+		"integrationRuntimeQueue": 2
+	}
+}
