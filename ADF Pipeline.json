@@ -1,0 +1,43 @@
+{"$schema":"http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#","
+contentVersion":"1.0.0.0","parameters":{"factoryName":{"type":"string","metadata":"Data Factory name"}
+,"onpremsqlserver":{"type":"string"},
+
+
+"AzureDataLakeStorage1":{"type":"string"}},"variables":
+{"factoryId":"[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"},"resources":[
+{"name":"[concat(parameters('factoryName'), '/copydata')]","type":"Microsoft.DataFactory/factories/pipelines"
+,"apiVersion":"2018-06-01","properties":
+
+
+{"activities":[{"name":"Lookup1","type":"Lookup","dependsOn":[]
+,"policy":{"timeout":"0.12:00:00","retry":0,"retryIntervalInSeconds":30,"secureOutput":false,"secureInput":false}
+,"userProperties":[],"typeProperties":
+
+{"source":{"type":"SqlServerSource","sqlReaderQuery":"
+select s.name as schemaname ,t.name as tablename from sys.tables t\ninner join sys.schemas s on
+ s.schema_id = t.schema_id\nwhere s.name='Sales'","queryTimeout":"02:00:00","partitionOption":"None"}
+,"dataset":{"referenceName":"SqlServerTable1","type":"DatasetReference","parameters":{}}
+,"firstRowOnly":false}},
+
+
+{"name":"ForEach1","type":"ForEach","dependsOn":
+[{"activity":"Lookup1","dependencyConditions":["Completed"]}],"userProperties":[],"typeProperties":
+{"items":{"value":"@activity('Lookup1').output.value","type":"Expression"},"activities":[
+
+
+{"name":"Copy data1","type":"Copy","dependsOn":[],"policy":{"timeout":"0.12:00:00","retry":0,
+"retryIntervalInSeconds":30,"secureOutput":false,"secureInput":false},"userProperties":[
+{"name":"Source","value":"."},
+
+{"name":"Destination","value":"/@{concat('item().schemaname','/','item().tablename')}
+/@{concat('item().tablename','.csv')}"}],"typeProperties":{"source":{"type":"SqlServerSource","sqlReaderQuery":
+{"value":"@{concat('select * from ',item().schemaname,'.',item().tablename )}","type":"Expression"}
+,"queryTimeout":"02:00:00","partitionOption":"None"},
+
+"sink":{"type":"DelimitedTextSink","storeSettings":
+{"type":"AzureBlobFSWriteSettings"},"formatSettings":{"type":"DelimitedTextWriteSettings","quoteAllText":
+true,"fileExtension":".txt"}},"enableStaging":false,"translator":{"type":"TabularTranslator","typeConversion"
+:true,"typeConversionSettings":{"allowDataTruncation":true,"treatBooleanAsNumber":false}}},"inputs":[
+{"referenceName":"SqlServerTable1","type":"DatasetReference","parameters":{}}],
+
+"outputs":[{"referenceName":"DelimitedText1","type":"DatasetReference","parameters":{"schemaname":{"value":"@item().schemaname","type":"Expression"},"tablename":{"value":"@item().tablename","type":"Expression"}}}]}]}}],"policy":{"elapsedTimeMetric":{},"cancelAfter":{}},"annotations":[]},"dependsOn":["[concat(variables('factoryId'), '/datasets/SqlServerTable1')]","[concat(variables('factoryId'), '/datasets/DelimitedText1')]"]},{"name":"[concat(parameters('factoryName'), '/SqlServerTable1')]","type":"Microsoft.DataFactory/factories/datasets","apiVersion":"2018-06-01","properties":{"linkedServiceName":{"referenceName":"[parameters('onpremsqlserver')]","type":"LinkedServiceReference"},"annotations":[],"type":"SqlServerTable","schema":[],"typeProperties":{}},"dependsOn":[]},{"name":"[concat(parameters('factoryName'), '/DelimitedText1')]","type":"Microsoft.DataFactory/factories/datasets","apiVersion":"2018-06-01","properties":{"linkedServiceName":{"referenceName":"[parameters('AzureDataLakeStorage1')]","type":"LinkedServiceReference"},"parameters":{"schemaname":{"type":"string"},"tablename":{"type":"string"}},"annotations":[],"type":"DelimitedText","typeProperties":{"location":{"type":"AzureBlobFSLocation","fileName":{"value":"@{concat(dataset().tablename,'.csv')}","type":"Expression"},"folderPath":{"value":"@dataset().schemaname","type":"Expression"},"fileSystem":"input"},"columnDelimiter":",","escapeChar":"\\","firstRowAsHeader":true,"quoteChar":"\""},"schema":[]},"dependsOn":[]}]}
